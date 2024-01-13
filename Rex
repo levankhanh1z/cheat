@@ -1,4 +1,4 @@
-local showText = true -- Đặt thành false nếu bạn không muốn hiển thị văn bản ESP cho khoáng sản
+local showText = true -- Change to false if you don't want to see the esp ore text
 
 if game.PlaceId == 8549934015 then
     allowedOres = {"Magma", "Stone", "Copper", "Basalt", "Amber", "Diorite", "Coal", "Crystallized Stone", "Nickel", "Bedrock", "Gold", "Granite", "Iron", "Marble", "Etherstone", "Prismatistone","Silver","Obsidian","Ice","Voidstone","Ruby","Celestone","Mantle","Goldstone","Barrier","Quartz","Reflectistone","Emerald","Bismuth"}
@@ -27,21 +27,23 @@ local function createESP(primary)
     box.ZIndex = 5
     box.Size = primary.Size + Vector3.new(0.1, 0.1, 0.1)
     box.Transparency = 0.5
-    box.Color = Color3.new(1, 0, 0) -- Bạn có thể tùy chỉnh màu sắc tại đây
+    box.Color = Color3.new(1, 0, 0) -- You can customize the color
 
-    if showText then
-        local billboard = Instance.new("BillboardGui", primary)
-        billboard.AlwaysOnTop = true
-        billboard.Size = UDim2.new(0, 200, 0, 30)
-        billboard.StudsOffset = Vector3.new(0, 3, 0)
+    local billboard = Instance.new("BillboardGui", box)
+    billboard.AlwaysOnTop = true
+    billboard.Size = UDim2.new(0, 200, 0, 30)
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
 
-        local nameLabel = Instance.new("TextLabel", billboard)
-        nameLabel.BackgroundTransparency = 1
-        nameLabel.Size = UDim2.new(1, 0, 0.5, 0)
-        nameLabel.Text = primary.Name
-        nameLabel.Font = Enum.Font.GothamSemibold
-        nameLabel.TextColor3 = Color3.new(1, 1, 1)
-        nameLabel.TextScaled = true
+    local nameLabel = Instance.new("TextLabel", billboard)
+    nameLabel.BackgroundTransparency = 1
+    nameLabel.Size = UDim2.new(1, 0, 0.5, 0)
+    nameLabel.Text = primary.Name
+    nameLabel.Font = Enum.Font.GothamSemibold
+    nameLabel.TextColor3 = Color3.new(1, 1, 1)
+    nameLabel.TextScaled = true
+
+    if not showText then
+        nameLabel.Visible = false -- Ẩn tên nếu showText là false
     end
 end
 
