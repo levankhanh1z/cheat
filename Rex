@@ -13,6 +13,8 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local StarterGui = game:GetService("StarterGui")
 
+local oreData = {} -- Bảng để lưu trữ dữ liệu của từng loại ore
+
 local function isValidName(name)
     for _, excludedName in pairs(excludedOres) do
         if name == excludedName then
@@ -45,23 +47,22 @@ local function createESP(primary)
         nameLabel.TextColor3 = Color3.new(1, 1, 1)
         nameLabel.TextScaled = true
 
-        local oreNameLabel = Instance.new("TextLabel", billboard)
-        oreNameLabel.BackgroundTransparency = 1
-        oreNameLabel.Size = UDim2.new(1, 0, 0.33, 0)
-        oreNameLabel.Position = UDim2.new(0, 0, 0.33, 0)
-        oreNameLabel.Text = "Excluded Ore: " .. primary.Name
-        oreNameLabel.Font = Enum.Font.GothamSemibold
-        oreNameLabel.TextColor3 = Color3.new(1, 1, 1)
-        oreNameLabel.TextScaled = true
+        if isValidName(primary.Name) then
+            if not oreData[primary.Name] then
+                oreData[primary.Name] = {Count = 1, Billboard = billboard}
+            else
+                oreData[primary.Name].Count = oreData[primary.Name].Count + 1
+            end
 
-        local statusLabel = Instance.new("TextLabel", billboard)
-        statusLabel.BackgroundTransparency = 1
-        statusLabel.Size = UDim2.new(1, 0, 0.33, 0)
-        statusLabel.Position = UDim2.new(0, 0, 0.66, 0)
-        statusLabel.Text = "Status: Active"
-        statusLabel.Font = Enum.Font.GothamSemibold
-        statusLabel.TextColor3 = Color3.new(0, 1, 0)
-        statusLabel.TextScaled = true
+            local oreDataLabel = Instance.new("TextLabel", oreData[primary.Name].Billboard)
+            oreDataLabel.BackgroundTransparency = 1
+            oreDataLabel.Size = UDim2.new(1, 0, 0.33, 0)
+            oreDataLabel.Position = UDim2.new(0, 0, 0.33, 0)
+            oreDataLabel.Text = "Count: " .. oreData[primary.Name].Count
+            oreDataLabel.Font = Enum.Font.GothamSemibold
+            oreDataLabel.TextColor3 = Color3.new(1, 1, 1)
+            oreDataLabel.TextScaled = true
+        end
     end
 end
 
