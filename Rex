@@ -36,7 +36,7 @@ local function createESP(primary)
     if showText then
         local billboard = Instance.new("BillboardGui", box)
         billboard.AlwaysOnTop = true
-        billboard.Size = UDim2.new(0, 100, 0, 30)
+        billboard.Size = UDim2.new(0, 200, 0, 30)
         billboard.StudsOffset = Vector3.new(0, 3, 0)
 
         local nameLabel = Instance.new("TextLabel", billboard)
@@ -46,6 +46,15 @@ local function createESP(primary)
         nameLabel.Font = Enum.Font.GothamSemibold
         nameLabel.TextColor3 = Color3.new(1, 1, 1)
         nameLabel.TextScaled = true
+
+        local oreNameLabel = Instance.new("TextLabel", billboard)
+        oreNameLabel.BackgroundTransparency = 1
+        oreNameLabel.Size = UDim2.new(1, 0, 0.5, 0)
+        oreNameLabel.Position = UDim2.new(0, 0, 0.5, 0)
+        oreNameLabel.Text = "Excluded Ore: " .. primary.Name
+        oreNameLabel.Font = Enum.Font.GothamSemibold
+        oreNameLabel.TextColor3 = Color3.new(1, 1, 1)
+        oreNameLabel.TextScaled = true
     end
 end
 
