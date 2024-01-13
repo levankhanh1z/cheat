@@ -1,23 +1,19 @@
-local showText = true -- Change to false if you don't want to see the esp ore text
+local showText = true -- Đặt thành false nếu bạn không muốn hiển thị văn bản ESP cho khoáng sản
 
 if game.PlaceId == 8549934015 then
-    excludedOres = {"Magma", "Stone", "Copper", "Basalt", "Amber", "Diorite", "Coal", "Crystallized Stone", "Nickel", "Bedrock", "Gold", "Granite", "Iron", "Marble", "Etherstone", "Prismatistone","Silver","Obsidian","Ice","Voidstone","Ruby","Celestone","Mantle","Goldstone","Barrier","Quartz","Reflectistone","Emerald","Bismuth"}
+    allowedOres = {"Magma", "Stone", "Copper", "Basalt", "Amber", "Diorite", "Coal", "Crystallized Stone", "Nickel", "Bedrock", "Gold", "Granite", "Iron", "Marble", "Etherstone", "Prismatistone","Silver","Obsidian","Ice","Voidstone","Ruby","Celestone","Mantle","Goldstone","Barrier","Quartz","Reflectistone","Emerald","Bismuth"}
 else
     if game.PlaceId == 14550379349 then
-        excludedOres = {"Sodium", "Eboxylite", "Plerivium", }
+        allowedOres = {"Sodium", "Eboxylite", "Plerivium"}
     end
 end
 
 local folder = game:GetService("Workspace").Mine
 local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local StarterGui = game:GetService("StarterGui")
-
-local oreData = {} -- Bảng để lưu trữ dữ liệu của từng loại ore
 
 local function isValidName(name)
-    for _, excludedName in pairs(excludedOres) do
-        if name == excludedName then
+    for _, allowedName in pairs(allowedOres) do
+        if name == allowedName then
             return true
         end
     end
@@ -31,42 +27,25 @@ local function createESP(primary)
     box.ZIndex = 5
     box.Size = primary.Size + Vector3.new(0.1, 0.1, 0.1)
     box.Transparency = 0.5
-    box.Color = Color3.new(1, 0, 0) -- You can customize the color
+    box.Color = Color3.new(1, 0, 0) -- Bạn có thể tùy chỉnh màu sắc tại đây
 
     if showText then
         local billboard = Instance.new("BillboardGui", primary)
         billboard.AlwaysOnTop = true
-        billboard.Size = UDim2.new(0, 200, 0, 60)
+        billboard.Size = UDim2.new(0, 200, 0, 30)
         billboard.StudsOffset = Vector3.new(0, 3, 0)
 
         local nameLabel = Instance.new("TextLabel", billboard)
         nameLabel.BackgroundTransparency = 1
-        nameLabel.Size = UDim2.new(1, 0, 0.33, 0)
+        nameLabel.Size = UDim2.new(1, 0, 0.5, 0)
         nameLabel.Text = primary.Name
         nameLabel.Font = Enum.Font.GothamSemibold
         nameLabel.TextColor3 = Color3.new(1, 1, 1)
         nameLabel.TextScaled = true
-
-        if isValidName(primary.Name) then
-            if not oreData[primary.Name] then
-                oreData[primary.Name] = {Count = 1, Billboard = billboard}
-            else
-                oreData[primary.Name].Count = oreData[primary.Name].Count + 1
-            end
-
-            local oreDataLabel = Instance.new("TextLabel", oreData[primary.Name].Billboard)
-            oreDataLabel.BackgroundTransparency = 1
-            oreDataLabel.Size = UDim2.new(1, 0, 0.33, 0)
-            oreDataLabel.Position = UDim2.new(0, 0, 0.33, 0)
-            oreDataLabel.Text = "Count: " .. oreData[primary.Name].Count
-            oreDataLabel.Font = Enum.Font.GothamSemibold
-            oreDataLabel.TextColor3 = Color3.new(1, 1, 1)
-            oreDataLabel.TextScaled = true
-        end
     end
 end
 
-local function isOreExcluded(block)
+local function isOreAllowed(block)
     if block:IsA("BasePart") and isValidName(block.Name) then
         createESP(block)
     else
@@ -75,9 +54,9 @@ local function isOreExcluded(block)
 end
 
 for _, part in pairs(folder:GetChildren()) do
-    isOreExcluded(part)
+    isOreAllowed(part)
 end
 
 folder.ChildAdded:Connect(function(child)
-    isOreExcluded(child)
+    isOreAllowed(child)
 end)
