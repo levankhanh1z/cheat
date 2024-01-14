@@ -1,7 +1,7 @@
--- LocalScript
 local danhSachTen = {"Stone", "Silver", "Copper"}
-local soLuongTen = {}
+local daKiemTra = {}  -- Danh sách để kiểm tra xem tên đã được kiểm tra hay chưa
 
+-- Hàm kiểm tra xem một tên có trong danh sách hay không
 local function tenCoTrongDanhSach(ten)
     for _, tenTrongDanhSach in pairs(danhSachTen) do
         if ten == tenTrongDanhSach then
@@ -11,27 +11,17 @@ local function tenCoTrongDanhSach(ten)
     return false
 end
 
-local function kiemTraVaGuiTinNhan()
-    local soLuongHienTai = {}
+-- Hàm kiểm tra và gửi tin nhắn nếu tên có trong danh sách
+local function kiemTraVaGuiTinNhan(part)
+    if tenCoTrongDanhSach(part.Name) and not daKiemTra[part.Name] then
+        -- Gọi sự kiện chat
+        local chatEvent = game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest
+        chatEvent:FireServer(part.Name, "All")
 
-    for _, part in pairs(game.Workspace.Mine:GetChildren()) do
-        if part:IsA("BasePart") and tenCoTrongDanhSach(part.Name) then
-            local ten = part.Name
-            soLuongHienTai[ten] = #game.Workspace.Mine:FindPartsInRegion3(part.Position, part.Position, nil, math.huge)
-        end
-    end
-
-    for ten, soLuong in pairs(soLuongHienTai) do
-        if soLuong ~= soLuongTen[ten] then
-            soLuongTen[ten] = soLuong
-
-            -- Gửi thông điệp tới chat
-            game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(ten.."x"..soLuong, "All")
-        end
+        -- Đánh dấu tên đã được kiểm tra
+        daKiemTra[part.Name] = true
     end
 end
 
--- Lặp lại kiểm tra và gửi thông điệp theo thời gian (ví dụ: mỗi giây)
-while wait(1) do
-    kiemTraVaGuiTinNhan()
-end
+-- Lắng nghe sự kiện khi một phần mới được thêm vào Mine
+game.Workspace.Mine.ChildAdded:Connect(kiemTraVaGuiTinNhan)
