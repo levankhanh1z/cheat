@@ -1,6 +1,6 @@
 local danhSachTen = {"Trinitium", "Poiseon", "Flaeon", "Freon", "Intoxium", "Rainbonite", "Coldfirium", "Sunstone", "Incinderium", "Pyrite", "Bismuth"}
-local daKiemTra = {}  -- Danh sách để theo dõi các tên đã kiểm tra
 
+-- Hàm kiểm tra xem một tên có trong danh sách hay không
 local function tenCoTrongDanhSach(ten)
     for _, tenTrongDanhSach in pairs(danhSachTen) do
         if ten == tenTrongDanhSach then
@@ -10,26 +10,22 @@ local function tenCoTrongDanhSach(ten)
     return false
 end
 
+-- Hàm kiểm tra và gửi tin nhắn nếu tên có trong danh sách
 local function kiemTraVaGuiTinNhan(part)
-    print("Checking and Sending Message for:", part.Name)
-    if tenCoTrongDanhSach(part.Name) and not daKiemTra[part.Name] then
+    if tenCoTrongDanhSach(part.Name) then
+        -- Gọi sự kiện chat
         local chatEvent = game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest
         chatEvent:FireServer(part.Name, "All")
-        
-        daKiemTra[part.Name] = true
+
+        -- Bạn có thể thay đổi "All" thành "Team" hoặc "Whisper" nếu bạn muốn chat cho một nhóm cụ thể hoặc whisper.
     end
 end
 
-local function kiemTraToanBoVaGuiTinNhan()
-    print("Checking and Sending Messages for all parts in Mine")
-    for _, part in pairs(game.Workspace.Mine:GetChildren()) do
-        kiemTraVaGuiTinNhan(part)
-    end
-end
-
+-- Lắng nghe sự kiện khi một phần mới được thêm vào Mine
 game.Workspace.Mine.ChildAdded:Connect(function(child)
-    print("Child Added:", child.Name)
-    kiemTraVaGuiTinNhan(child)
+    if child:IsA("Part") and tenCoTrongDanhSach(child.Name) then
+        kiemTraVaGuiTinNhan(child)
+    end
 end)
 
 game.Workspace.Mine.ChildRemoved:Connect(function(child)
