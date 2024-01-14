@@ -1,5 +1,7 @@
 local danhSachTen = {"Trinitium", "Poiseon", "Flaeon", "Freon", "Intoxium", "Rainbonite", "Coldfirium", "Sunstone", "Incinderium", "Pyrite", "Bismuth"}
 
+
+
 -- Hàm kiểm tra xem một tên có trong danh sách hay không
 local function tenCoTrongDanhSach(ten)
     for _, tenTrongDanhSach in pairs(danhSachTen) do
@@ -21,18 +23,17 @@ local function kiemTraVaGuiTinNhan(part)
     end
 end
 
--- Lắng nghe sự kiện khi một phần mới được thêm vào Mine
-game.Workspace.Mine.ChildAdded:Connect(function(child)
-    if child:IsA("Part") and tenCoTrongDanhSach(child.Name) then
-        kiemTraVaGuiTinNhan(child)
+-- Lắng nghe sự kiện khi một phím được nhấn
+local UserInputService = game:GetService("UserInputService")
+UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+    -- Kiểm tra nếu phím 'K' được nhấn và sự kiện chưa được xử lý bởi game
+    if input.KeyCode == Enum.KeyCode.K and not gameProcessedEvent then
+        -- Kiểm tra và gửi tin nhắn cho các phần trong Mine
+        for _, child in pairs(game.Workspace.Mine:GetChildren()) do
+            if child:IsA("Part") and tenCoTrongDanhSach(child.Name) then
+                kiemTraVaGuiTinNhan(child)
+            end
+        end
     end
 end)
 
-game.Workspace.Mine.ChildRemoved:Connect(function(child)
-    print("Child Removed:", child.Name)
-    -- Reset trạng thái kiểm tra khi có sự thay đổi trong Mine
-    daKiemTra[child.Name] = nil
-end)
-
--- Kiểm tra và gửi tin nhắn cho tất cả các phần trong Mine khi script được kích hoạt
-kiemTraToanBoVaGuiTinNhan()
