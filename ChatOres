@@ -1,5 +1,5 @@
 local danhSachTen = {"Trinitium", "Poiseon", "Flaeon", "Freon", "Intoxium", "Rainbonite", "Coldfirium", "Sunstone", "Incinderium", "Pyrite", "Bismuth"}
-local daKiemTra = {}  -- Danh sách để kiểm tra xem tên đã được kiểm tra hay chưa
+local daKiemTra = {}  -- Danh sách để kiểm tra xem tên đã được kiểm tra hay chưas
 
 -- Hàm kiểm tra xem một tên có trong danh sách hay không
 local function tenCoTrongDanhSach(ten)
