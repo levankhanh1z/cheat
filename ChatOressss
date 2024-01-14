@@ -1,4 +1,4 @@
-local danhSachTen = {"Trinitium", "Poiseon", "Flaeon", "Freon", "Intoxium", "Rainbonite", "Coldfirium", "Sunstone", "Incinderium", "Pyrite", "Bismuth"}
+local danhSachTen = {"Trinitium", "Poiseon", "Flaeon", "Freon", "Intoxium", "Rainbonite", "Coldfirium", "Sunstone", "Incinderium", "Pyrite", "Bismuth" , "Bluesteel", "Tanzanite", "Elysian", "Nocturnite", "Freon", "Snoblintium", "Azuryl", "Glacielle", "Cybernetium", "Inclemetite", "Viridian", "Promethium", "Newtonium", "Elexinite", "Astatine", "Spristium", "Erodimium", "Candilium", "Terratomere", "Spatializine", "Lanthanite", "Neptunium", "Acceleratium", "Quandrium", "Lucidium", "Polarium", "Illusory Bubblegram"}
 
 
 
