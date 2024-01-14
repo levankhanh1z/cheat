@@ -1,0 +1,42 @@
+local danhSachTen = {"Trinitium", "Poiseon", "Flaeon", "Freon", "Intoxium", "Rainbonite", "Coldfirium", "Sunstone", "Incinderium", "Pyrite", "Bismuth"}
+local daKiemTra = {}  -- Danh sách để theo dõi các tên đã kiểm tra
+
+local function tenCoTrongDanhSach(ten)
+    for _, tenTrongDanhSach in pairs(danhSachTen) do
+        if ten == tenTrongDanhSach then
+            return true
+        end
+    end
+    return false
+end
+
+local function kiemTraVaGuiTinNhan(part)
+    print("Checking and Sending Message for:", part.Name)
+    if tenCoTrongDanhSach(part.Name) and not daKiemTra[part.Name] then
+        local chatEvent = game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest
+        chatEvent:FireServer(part.Name, "All")
+        
+        daKiemTra[part.Name] = true
+    end
+end
+
+local function kiemTraToanBoVaGuiTinNhan()
+    print("Checking and Sending Messages for all parts in Mine")
+    for _, part in pairs(game.Workspace.Mine:GetChildren()) do
+        kiemTraVaGuiTinNhan(part)
+    end
+end
+
+game.Workspace.Mine.ChildAdded:Connect(function(child)
+    print("Child Added:", child.Name)
+    kiemTraVaGuiTinNhan(child)
+end)
+
+game.Workspace.Mine.ChildRemoved:Connect(function(child)
+    print("Child Removed:", child.Name)
+    -- Reset trạng thái kiểm tra khi có sự thay đổi trong Mine
+    daKiemTra[child.Name] = nil
+end)
+
+-- Kiểm tra và gửi tin nhắn cho tất cả các phần trong Mine khi script được kích hoạt
+kiemTraToanBoVaGuiTinNhan()
