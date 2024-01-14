@@ -1,0 +1,31 @@
+-- LocalScript
+local danhSachTen = {"Stone", "Silver", "Copper"}
+local soLuongTen = {}
+
+local function tenCoTrongDanhSach(ten)
+    for _, tenTrongDanhSach in pairs(danhSachTen) do
+        if ten == tenTrongDanhSach then
+            return true
+        end
+    end
+    return false
+end
+
+local function kiemTraVaGuiTinNhan(part)
+    if part:IsA("BasePart") then
+        local ten = part.Name
+        if tenCoTrongDanhSach(ten) then
+            local soLuongTruocDo = soLuongTen[ten] or 0
+            local soLuongHienTai = #game.Workspace.Mine:FindPartsInRegion3(part.Position, part.Position, nil, math.huge)
+
+            if soLuongHienTai ~= soLuongTruocDo then
+                soLuongTen[ten] = soLuongHienTai
+
+                -- Gửi thông điệp tới chat
+                game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(ten.."x"..soLuongHienTai, "All")
+            end
+        end
+    end
+end
+
+game.Workspace.Mine.ChildAdded:Connect(kiemTraVaGuiTinNhan)
